@@ -2238,3 +2238,57 @@ button { cursor: pointer; touch-action: manipulation; }
   padding: 0 14px;
   cursor: pointer;
 }
+
+/* ---------- OTP sign in ---------- */
+.otp-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  margin: 22px 0 6px;
+}
+
+.otp-input {
+  width: 42px;
+  height: 50px;
+  text-align: center;
+  font: 700 22px 'DM Sans', sans-serif;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  caret-color: var(--plum);
+}
+
+.otp-input:focus {
+  border-color: var(--plum);
+}
+
+.checkout-form .otp-boxes ~ .checkout { margin-top: 14px; }
+
+.otp-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.otp-footer .link-btn { font-size: 12px; }
+
+.dev-otp-chip {
+  margin-top: 18px;
+  padding: 9px 12px;
+  background: #fef9e3;
+  border: 1px dashed #e0b64a;
+  border-radius: 10px;
+  font: 500 12px 'DM Sans', sans-serif;
+  color: #7a5c12;
+  text-align: center;
+}
+
+.dev-otp-chip b {
+  font-size: 16px;
+  letter-spacing: 3px;
+  color: #5a4208;
+}

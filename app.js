@@ -20,6 +20,12 @@ const FREE_SHIPPING_OVER = 999;
 const DB_USER = 'akriva_user';
 const DB_ORDERS = 'akriva_orders';
 const DB_ADDRESSES = 'akriva_addresses';
+const OTP_EXPIRY_MS = 5 * 60 * 1000;
+const OTP_MAX_ATTEMPTS = 5;
+const OTP_RESEND_COOLDOWN = 30;
+
+let otpState = { phone: null, code: null, expiresAt: 0, attempts: 0 };
+let otpCountdownTimer = null;
 
 const store = {
   get(key, fallback) {
@@ -296,8 +302,8 @@ function openWishlist() {
 
 function renderProfile() {
   const wrap = document.getElementById('profile-welcome');
-  if (currentUser) {
-    wrap.innerHTML = `<span class="profile-avatar">${escapeHTML(currentUser.name.charAt(0).toUpperCase())}</span><div><p>WELCOME BACK</p><h2>${escapeHTML(currentUser.name)}</h2><p class="profile-sub">${currentUser.phone ? '☏ ' + escapeHTML(currentUser.phone) : ''}</p><button type="button" data-sign-out>Sign out</button></div>`;
+  if (currentUser && currentUser.phone) {
+    wrap.innerHTML = `<span class="profile-avatar">✓</span><div><p>LOGGED IN</p><h2>Signed in</h2><p class="profile-sub">☏ +91 ${escapeHTML(currentUser.phone.slice(0, 2))}XXXXX${escapeHTML(currentUser.phone.slice(7))}</p><button type="button" data-sign-out>Sign out</button></div>`;
   } else {
     wrap.innerHTML = `<span class="profile-avatar">A</span><div><p>WELCOME TO AKRIVA</p><h2>Create your account</h2><button type="button" id="sign-in-button">Sign in or create account ›</button></div>`;
   }
@@ -309,28 +315,103 @@ function openProfile() {
 }
 
 function renderSignin() {
-  document.getElementById('signin-content').innerHTML = `<p class="support-intro">Enter your details to create or sign in to your Akriva account. Your orders, addresses and wishlist sync to this account.</p>
+  document.getElementById('signin-content').innerHTML = `<p class="support-intro">Enter your mobile number to sign in to your Akriva account. Your orders, addresses and wishlist sync to this account.</p>
     <form class="checkout-form" id="signin-form" novalidate>
-      <label class="field"><span>Full name</span><input id="si-name" type="text" placeholder="Your name" autocomplete="name"></label>
-      <label class="field"><span>Mobile number</span><input id="si-phone" type="tel" placeholder="10-digit number" maxlength="10" autocomplete="tel"></label>
-      <label class="field"><span>Email (optional)</span><input id="si-email" type="email" placeholder="you@email.com" autocomplete="email"></label>
-      <button class="checkout" type="submit">Sign in →</button>
+      <label class="field"><span>Mobile number</span><input id="si-phone" type="tel" placeholder="10-digit number" maxlength="10" inputmode="numeric" autocomplete="tel"></label>
+      <button class="checkout" type="submit">Send OTP →</button>
     </form>`;
 }
 
-function submitSignin() {
-  const name = document.getElementById('si-name').value.trim();
-  const phone = document.getElementById('si-phone').value.trim();
-  const email = document.getElementById('si-email').value.trim();
+function generateOtpCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function maskPhone(phone) {
+  return '+91 ' + phone.slice(0, 2) + 'XXXXX' + phone.slice(7);
+}
+
+function requestOtp() {
+  const phone = document.getElementById('si-phone').value.replace(/\D/g, '');
   const phoneValid = /^[6-9]\d{9}$/.test(phone);
-  document.getElementById('si-name').classList.toggle('invalid', !name);
-  document.getElementById('si-phone').classList.toggle('invalid', !phoneValid);
-  if (!name) { toast('Please enter your full name'); return; }
+  document.getElementById('si-phone').classList.toggle('invalid', phone && !phoneValid);
+  if (!phone) { toast('Please enter your mobile number'); return; }
   if (!phoneValid) { toast('Enter a valid 10-digit mobile number'); return; }
-  currentUser = { name, phone, email };
-  store.set(DB_USER, currentUser);
-  toast(`Welcome to Akriva, ${name}! 🎉`);
-  openProfile();
+  otpState = { phone, code: generateOtpCode(), expiresAt: Date.now() + OTP_EXPIRY_MS, attempts: OTP_MAX_ATTEMPTS };
+  renderOtpStep();
+  toast(`OTP sent to ${maskPhone(phone)}`);
+}
+
+function renderOtpStep() {
+  clearTimeout(otpCountdownTimer);
+  const boxes = Array.from({ length: 6 }, (_, i) =>
+    `<input class="otp-input" type="tel" maxlength="1" inputmode="numeric" autocomplete="one-time-code" aria-label="OTP digit ${i + 1}">`).join('');
+  document.getElementById('signin-content').innerHTML = `
+    <p class="support-intro">Enter the 6-digit code sent to <b>${maskPhone(otpState.phone)}</b>.</p>
+    <div class="otp-boxes" id="otp-boxes">${boxes}</div>
+    <button class="checkout" type="button" id="otp-verify-btn">Verify OTP →</button>
+    <div class="otp-footer">
+      <button class="link-btn" type="button" id="otp-resend-btn" disabled>Resend code in <b id="otp-countdown">${OTP_RESEND_COOLDOWN}</b>s</button>
+      <button class="link-btn" type="button" id="otp-change-btn">Change number</button>
+    </div>
+    <div class="dev-otp-chip">Demo mode — no SMS. Your OTP is <b id="otp-dev-code"></b></div>`;
+  document.getElementById('otp-dev-code').textContent = otpState.code;
+  const inputs = document.querySelectorAll('.otp-input');
+  if (inputs[0]) inputs[0].focus();
+  startOtpCountdown(OTP_RESEND_COOLDOWN);
+}
+
+function startOtpCountdown(seconds) {
+  clearTimeout(otpCountdownTimer);
+  const span = document.getElementById('otp-countdown');
+  const btn = document.getElementById('otp-resend-btn');
+  let remaining = seconds;
+  span.textContent = remaining;
+  btn.disabled = true;
+  const tick = () => {
+    remaining -= 1;
+    if (remaining > 0) {
+      span.textContent = remaining;
+      otpCountdownTimer = setTimeout(tick, 1000);
+    } else {
+      span.textContent = '0';
+      btn.disabled = false;
+      btn.innerHTML = 'Resend code';
+    }
+  };
+  otpCountdownTimer = setTimeout(tick, 1000);
+}
+
+function getOtpDigits() {
+  return Array.from(document.querySelectorAll('.otp-input')).map(i => i.value).join('');
+}
+
+function verifyOtp() {
+  const digits = getOtpDigits();
+  if (digits.length !== 6) { toast('Enter the full 6-digit code'); return; }
+  if (!otpState || !otpState.code) { toast('Please request a fresh OTP'); return; }
+  if (Date.now() > otpState.expiresAt) { toast('OTP has expired. Request a new one.'); return; }
+  if (otpState.attempts <= 0) { toast('Too many wrong attempts. Request a new OTP.'); return; }
+  if (digits === otpState.code) {
+    currentUser = { phone: otpState.phone };
+    store.set(DB_USER, currentUser);
+    toast(`Verified! Welcome to Akriva 🎉`);
+    openProfile();
+  } else {
+    otpState.attempts -= 1;
+    const left = otpState.attempts;
+    document.querySelectorAll('.otp-input').forEach(i => { i.value = ''; });
+    const first = document.querySelector('.otp-input');
+    if (first) first.focus();
+    toast(left > 0 ? `Wrong OTP. ${left} ${left === 1 ? 'attempt' : 'attempts'} left.` : 'Too many wrong attempts. Request a new OTP.');
+  }
+}
+
+function resendOtp() {
+  otpState.code = generateOtpCode();
+  otpState.expiresAt = Date.now() + OTP_EXPIRY_MS;
+  otpState.attempts = OTP_MAX_ATTEMPTS;
+  renderOtpStep();
+  toast(`New OTP sent to ${maskPhone(otpState.phone)}`);
 }
 
 function openSignin() {
@@ -341,6 +422,8 @@ function openSignin() {
 function signOut() {
   currentUser = null;
   store.set(DB_USER, null);
+  clearTimeout(otpCountdownTimer);
+  otpState = { phone: null, code: null, expiresAt: 0, attempts: 0 };
   toast('Signed out of Akriva');
   openProfile();
 }
@@ -778,6 +861,21 @@ document.addEventListener('click', event => {
     return;
   }
 
+  if (event.target.closest('#otp-verify-btn')) {
+    verifyOtp();
+    return;
+  }
+
+  if (event.target.closest('#otp-resend-btn')) {
+    resendOtp();
+    return;
+  }
+
+  if (event.target.closest('#otp-change-btn')) {
+    renderSignin();
+    return;
+  }
+
   if (event.target.closest('[data-sign-out]')) {
     signOut();
     return;
@@ -869,7 +967,7 @@ document.addEventListener('submit', event => {
     saveNewAddress();
   } else if (event.target.id === 'signin-form') {
     event.preventDefault();
-    submitSignin();
+    requestOtp();
   } else if (event.target.id === 'akrivaSupportForm') {
     event.preventDefault();
     handleSupportSubmit(event);
@@ -897,6 +995,35 @@ document.getElementById('modal-buy').addEventListener('click', () => {
   addItem(selectedProduct);
   document.getElementById('product-modal').classList.add('hidden');
   openCheckout();
+});
+
+document.addEventListener('input', event => {
+  if (event.target.classList.contains('otp-input')) {
+    event.target.value = event.target.value.replace(/\D/g, '');
+    if (event.target.value.length > 1) event.target.value = event.target.value.slice(-1);
+    const inputs = Array.from(document.querySelectorAll('.otp-input'));
+    const idx = inputs.indexOf(event.target);
+    if (event.target.value && idx < inputs.length - 1) {
+      inputs[idx + 1].focus();
+    }
+    if (inputs.every(i => i.value)) verifyOtp();
+  }
+  if (event.target.id === 'si-phone') {
+    event.target.value = event.target.value.replace(/\D/g, '');
+  }
+});
+
+document.addEventListener('keydown', event => {
+  if (!event.target.classList.contains('otp-input')) return;
+  const inputs = Array.from(document.querySelectorAll('.otp-input'));
+  const idx = inputs.indexOf(event.target);
+  if (event.key === 'Backspace' && !event.target.value && idx > 0) {
+    inputs[idx - 1].focus();
+    inputs[idx - 1].value = '';
+  }
+  if (event.key === 'Enter') {
+    verifyOtp();
+  }
 });
 
 renderHome();
