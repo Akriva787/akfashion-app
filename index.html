@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#401930">
+  <title>Akriva — Fashion & Beauty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- HOME -->
+    <main class="screen" id="home-screen">
+      <div class="amz-strip">
+        <button class="amz-brand" type="button" data-action="home" aria-label="Akriva home"><span class="amz-brand-smile">✦</span>Akriva</button>
+        <button class="amz-loc location" type="button"><span class="amz-pin">⌖</span><span><small>Deliver to</small><b>New Delhi 110001</b></span></button>
+        <button class="amz-bag icon-button" type="button" data-action="cart" aria-label="Open bag">♧<span class="cart-count">0</span></button>
+      </div>
+      <div class="amz-search" data-action="search" role="button" tabindex="0" aria-label="Search">
+        <span class="amz-search-icon">⌕</span>
+        <input type="search" id="home-search" placeholder="Search: sarees, glam kits, dresses, shirts…" readonly>
+      </div>
+      <div class="amz-sublinks">
+        <button type="button" data-action="all">⚡ Deals</button>
+        <button type="button" data-action="all">🎁 Festive Sale</button>
+        <span>New in</span>
+        <span>Best sellers</span>
+      </div>
+
+      <section class="amz-section">
+        <div class="amz-sec-head"><h2>Deals of the Day</h2><button type="button" data-action="all">See all ›</button></div>
+        <div class="amz-scroll" id="deal-slider"></div>
+      </section>
+
+      <div class="amz-banner">
+        <div><span class="amz-banner-brand">akriva</span><b>Akriva Festive Sale</b><p>New season edits starting at ₹799</p></div>
+        <span class="amz-banner-badge">MIN<br>30% OFF</span>
+      </div>
+
+      <section class="amz-section">
+        <div class="amz-sec-head"><h2>Shop by Category</h2><button type="button" data-action="all">See all ›</button></div>
+        <div class="amz-cats" id="cat-grid"></div>
+      </section>
+
+      <section class="amz-section">
+        <div class="amz-sec-head"><h2>Trending Now</h2><button type="button" data-action="all">See all ›</button></div>
+        <div class="amz-scroll" id="trend-slider"></div>
+      </section>
+
+      <section class="amz-section">
+        <div class="amz-sec-head"><h2>New Arrivals</h2><button type="button" data-action="all">See all ›</button></div>
+        <div class="amz-grid" id="products"></div>
+      </section>
+    </main>
+
+    <!-- EXPLORE -->
+    <main class="screen hidden" id="explore-screen">
+      <header class="topbar">
+        <div><small>DISCOVER AKRIVA</small><b>Explore</b></div>
+        <button class="bag-button icon-button" type="button" data-action="cart" aria-label="Open bag">♧<span class="cart-count">0</span></button>
+      </header>
+      <div class="explore-stories">
+        <div class="story-item" data-story="All" role="button" aria-label="Trending">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=150" alt="Trending"></div>
+          <span class="story-label">Trending</span>
+        </div>
+        <div class="story-item" data-story="All" role="button" aria-label="New Drops">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=150" alt="New Drops"></div>
+          <span class="story-label">New Drops</span>
+        </div>
+        <div class="story-item" data-story="Beauty" role="button" aria-label="Beauty">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=150" alt="Beauty"></div>
+          <span class="story-label">Beauty</span>
+        </div>
+      </div>
+      <div class="explore-grid" id="explore-grid">
+        <article class="explore-card tall" data-lookbook role="button" tabindex="0" aria-label="Summer Resort Lookbook">
+          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500" alt="Summer Resort Lookbook">
+          <div class="card-overlay">
+            <h4 class="card-title">Summer Resort Lookbook</h4>
+            <span class="card-price">Explore all 16 pieces</span>
+          </div>
+        </article>
+        <article class="explore-card" data-product="1" role="button" tabindex="0" aria-label="View Rose Drape Saree">
+          <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500" alt="Rose Drape Saree">
+          <div class="card-overlay">
+            <h4 class="card-title">Rose Drape Saree</h4>
+            <span class="card-price">₹2,499 · BESTSELLER</span>
+          </div>
+        </article>
+        <article class="explore-card" data-product="2" role="button" tabindex="0" aria-label="View Soft Glam Kit">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500" alt="Soft Glam Kit">
+          <div class="card-overlay">
+            <h4 class="card-title">Soft Glam Kit</h4>
+            <span class="card-price">₹1,299 · NEW</span>
+          </div>
+        </article>
+        <article class="explore-card" data-product="4" role="button" tabindex="0" aria-label="View Classic Resort Shirt">
+          <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=500" alt="Classic Resort Shirt">
+          <div class="card-overlay">
+            <h4 class="card-title">Classic Resort Shirt</h4>
+            <span class="card-price">₹1,699</span>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- CATALOG -->
+    <main class="screen hidden" id="catalog-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-action="home" aria-label="Back">‹</button>
+        <div><small>SHOP AKRIVA</small><h2 id="catalog-title">All collections</h2></div>
+      </header>
+      <div class="filter-row" id="filters"></div>
+      <div class="catalog-grid" id="catalog-products"></div>
+    </main>
+
+    <!-- SEARCH -->
+    <main class="screen hidden" id="search-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-action="home" aria-label="Back">‹</button>
+        <div><small>DISCOVER</small><h2>Search Akriva</h2></div>
+      </header>
+      <div class="search-field"><span>⌕</span><input id="search-input" type="search" autocomplete="off" placeholder="Try saree, beauty or shirts…"><button type="button" id="clear-search" aria-label="Clear">×</button></div>
+      <div class="popular-searches" id="popular-searches"><p>POPULAR SEARCHES</p><div><button type="button" data-search-term="saree">Sarees</button><button type="button" data-search-term="beauty">Beauty</button><button type="button" data-search-term="dress">Dresses</button><button type="button" data-search-term="shirt">Shirts</button></div></div>
+      <p class="result-count" id="result-count">Curated for you</p>
+      <div class="products" id="search-results"></div>
+    </main>
+
+    <!-- CART -->
+    <main class="screen hidden" id="cart-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-action="home" aria-label="Back">‹</button>
+        <div><small>YOUR BAG</small><h2>Ready to shine</h2></div>
+      </header>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-footer" id="cart-footer"></div>
+    </main>
+
+    <!-- CHECKOUT -->
+    <main class="screen hidden" id="checkout-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-checkout-back aria-label="Back to bag">‹</button>
+        <div><small>SECURE CHECKOUT</small><h2>Checkout</h2></div>
+      </header>
+      <div id="checkout-content"></div>
+    </main>
+
+    <!-- WISHLIST -->
+    <main class="screen hidden" id="wishlist-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-action="home" aria-label="Back">‹</button>
+        <div><small>YOUR EDIT</small><h2>Saved loves</h2></div>
+      </header>
+      <div class="wishlist-intro"><span>♥</span><p>Every piece you love, saved in one place.</p></div>
+      <div class="wishlist-tools" id="wishlist-tools"></div>
+      <div class="products" id="wishlist-products"></div>
+    </main>
+
+    <!-- PROFILE -->
+    <main class="screen hidden" id="profile-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-back="profile" aria-label="Back">‹</button>
+        <div><small>MY AKRIVA</small><h2>Your space</h2></div>
+      </header>
+      <div class="profile-welcome" id="profile-welcome"></div>
+      <div class="profile-menu">
+        <button type="button" data-profile-action="orders"><span>♅</span><div><b>Your orders</b><small>Track and view past orders</small></div><i>›</i></button>
+        <button type="button" data-profile-action="addresses"><span>⌖</span><div><b>Saved addresses</b><small>Manage your delivery details</small></div><i>›</i></button>
+        <button type="button" data-profile-action="support"><span>?</span><div><b>Help & support</b><small>FAQs and contact options</small></div><i>›</i></button>
+      </div>
+    </main>
+
+    <!-- SIGN IN -->
+    <main class="screen hidden" id="signin-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-back="profile" aria-label="Back">‹</button>
+        <div><small>MY AKRIVA</small><h2>Sign in</h2></div>
+      </header>
+      <div id="signin-content"></div>
+    </main>
+
+    <!-- ORDERS -->
+    <main class="screen hidden" id="orders-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-back="profile" aria-label="Back">‹</button>
+        <div><small>MY AKRIVA</small><h2>Your orders</h2></div>
+      </header>
+      <div id="orders-list"></div>
+    </main>
+
+    <!-- ADDRESSES -->
+    <main class="screen hidden" id="addresses-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-back="profile" aria-label="Back">‹</button>
+        <div><small>MY AKRIVA</small><h2>Saved addresses</h2></div>
+      </header>
+      <div id="address-list"></div>
+      <button class="checkout" type="button" data-add-address>+ Add new address</button>
+      <div id="address-form-wrap" class="hidden"></div>
+    </main>
+
+    <!-- SUPPORT -->
+    <main class="screen hidden" id="support-screen">
+      <header class="inner-header">
+        <button class="back" type="button" data-back="profile" aria-label="Back">‹</button>
+        <div><small>MY AKRIVA</small><h2>Help & support</h2></div>
+      </header>
+      <div id="support-content"></div>
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item selected" type="button" data-action="home"><span>⌂</span>Home</button>
+      <button class="nav-item" type="button" data-action="explore"><span>▦</span>Explore</button>
+      <button class="nav-item" type="button" data-action="search"><span>⌕</span>Search</button>
+      <button class="nav-item" type="button" data-action="wishlist"><span>♡</span>Wishlist</button>
+      <button class="nav-item" type="button" data-action="profile"><span>♙</span>Profile</button>
+    </nav>
+
+    <!-- PRODUCT MODAL -->
+    <div class="overlay hidden" id="product-modal" role="dialog" aria-modal="true">
+      <div class="product-modal-content">
+        <button class="modal-close" type="button" data-action="close" aria-label="Close">×</button>
+        <div class="modal-image" id="modal-image"></div>
+        <div class="modal-info">
+          <small class="modal-cat" id="modal-category"></small>
+          <h2 id="modal-name"></h2>
+          <div class="modal-rating" id="modal-rating"></div>
+          <p class="modal-price" id="modal-price"></p>
+          <p class="modal-description">Crafted for comfort and styled to impress — this Akriva piece is your effortless everyday statement.</p>
+          <p class="modal-delivery">FREE Delivery over ₹999 — arrives in 4–5 days · <b>COD available</b></p>
+          <div class="sizes"><span>Select size</span><button type="button">S</button><button type="button" class="selected-size">M</button><button type="button">L</button><button type="button">XL</button></div>
+          <div class="modal-actions">
+            <button class="add-button" type="button" id="modal-add">Add to bag <span>+</span></button>
+            <button class="buy-button" type="button" id="modal-buy">Buy now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Akriva Support Widget -->
+  <button class="chat-support-btn" id="supportTrigger" aria-label="Help & Support">💬</button>
+  <div class="akriva-drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="akriva-drawer" id="supportDrawer" role="dialog" aria-modal="true" aria-label="Akriva Support">
+    <div class="drawer-header">
+      <h3>Akriva Support</h3>
+      <button class="close-btn" id="closeDrawerBtn" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <div class="chat-tabs">
+        <button type="button" class="chat-tab active" data-chat-tab="chat">Chat</button>
+        <button type="button" class="chat-tab" data-chat-tab="form">Raise a ticket</button>
+      </div>
+      <div class="chat-panel" id="chat-panel">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-chips" id="chat-chips"></div>
+        <div class="chat-compose">
+          <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off">
+          <button type="button" id="chat-send" aria-label="Send">➤</button>
+        </div>
+      </div>
+      <form id="akrivaSupportForm" class="hidden" novalidate>
+        <div class="form-group">
+          <label class="required" for="issueCategory">What do you need help with?</label>
+          <select id="issueCategory" class="akriva-select" required>
+            <option value="">Select Category</option>
+            <option value="order">Order &amp; Delivery Issue</option>
+            <option value="return">Return &amp; Exchange</option>
+            <option value="payment">Payment &amp; Refund</option>
+            <option value="product">Product Query</option>
+            <option value="technical">App / Website Issue</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="required" for="userPhone">Phone Number</label>
+          <input type="tel" id="userPhone" class="akriva-input" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel" required>
+        </div>
+        <div class="form-group">
+          <label for="orderId">Order ID (Optional)</label>
+          <input type="text" id="orderId" class="akriva-input" placeholder="e.g. #AK-98213">
+        </div>
+        <div class="form-group">
+          <label class="required" for="issueDetails">Describe your issue</label>
+          <textarea id="issueDetails" class="akriva-textarea" rows="4" placeholder="Please write details here..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="attachment">Attach Screenshot / Image (Optional)</label>
+          <input type="file" id="attachment" class="akriva-input" accept="image/*">
+        </div>
+        <button type="submit" id="submitSupportBtn" class="submit-btn" disabled>Submit Request</button>
+      </form>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
