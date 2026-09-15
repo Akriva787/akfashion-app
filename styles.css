@@ -419,12 +419,12 @@ button { cursor: pointer; touch-action: manipulation; }
 
 /* ---------- Inner headers & filters ---------- */
 .inner-header {
-  height: 55px;
+  height: 64px;
   margin-bottom: 17px;
 }
 
 .inner-header .back {
-  font-size: 28px;
+  font-size: 30px;
   color: var(--plum);
   border: 0;
   background: none;
@@ -432,17 +432,17 @@ button { cursor: pointer; touch-action: manipulation; }
 }
 
 .inner-header small {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--muted);
-  letter-spacing: 1.4px;
+  letter-spacing: 1.6px;
   font-weight: 700;
 }
 
 .inner-header h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 23px;
-  line-height: 23px;
-  margin: 1px 0 0;
+  font-size: 28px;
+  line-height: 28px;
+  margin: 2px 0 0;
 }
 
 .filter-row {
