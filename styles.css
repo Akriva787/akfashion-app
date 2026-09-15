@@ -1733,7 +1733,7 @@ button { cursor: pointer; touch-action: manipulation; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 16px 8px;
+  padding: 12px 16px 12px;
 }
 
 .amz-loc {
@@ -1755,7 +1755,7 @@ button { cursor: pointer; touch-action: manipulation; }
   border: 0;
   color: #ffd166;
   font-family: "Playfair Display", serif;
-  font-size: 22px;
+  font-size: 30px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -1766,23 +1766,23 @@ button { cursor: pointer; touch-action: manipulation; }
 }
 
 .amz-brand-smile {
-  font-size: 16px;
+  font-size: 20px;
   color: #ff8fab;
   line-height: 1;
 }
 
 .amz-loc small {
   display: block;
-  font-size: 9px;
+  font-size: 10px;
   opacity: 0.75;
-  line-height: 10px;
+  line-height: 11px;
 }
 
-.amz-loc b { font-size: 12px; line-height: 14px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.amz-loc b { font-size: 13px; line-height: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.amz-pin { font-size: 18px; line-height: 16px; color: #f5a623; }
+.amz-pin { font-size: 20px; line-height: 18px; color: #f5a623; }
 
-.amz-strip .amz-bag { color: #fff; font-size: 24px; }
+.amz-strip .amz-bag { color: #fff; font-size: 27px; }
 
 .amz-search {
   display: flex;
