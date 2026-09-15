@@ -1731,9 +1731,16 @@ button { cursor: pointer; touch-action: manipulation; }
   background: linear-gradient(120deg, #2a0a1a, #3b0a24);
   color: #fff;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 16px 14px;
+}
+
+.amz-strip-top {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px 12px;
 }
 
 .amz-loc {
@@ -1791,9 +1798,9 @@ button { cursor: pointer; touch-action: manipulation; }
   background: #fff;
   border: 1px solid #d5d5d5;
   border-radius: 8px;
-  margin: 8px 12px 0;
-  padding: 8px 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  margin: 0;
+  padding: 10px 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
