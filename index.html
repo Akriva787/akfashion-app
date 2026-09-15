@@ -17,7 +17,7 @@
       <div class="amz-strip">
         <div class="amz-strip-top">
           <button class="amz-brand" type="button" data-action="home" aria-label="Akriva home"><span class="amz-brand-smile">✦</span>Akriva</button>
-          <button class="amz-loc location" type="button"><span class="amz-pin">⌖</span><span><small>Deliver to</small><b>New Delhi 110001</b></span></button>
+          <button class="amz-loc location" type="button" data-location aria-label="Change delivery location"><span class="amz-pin">⌖</span><span><small>Deliver to</small><b id="location-label">New Delhi 110001</b></span></button>
           <button class="amz-bag icon-button" type="button" data-action="cart" aria-label="Open bag">♧<span class="cart-count">0</span></button>
         </div>
         <div class="amz-search">
@@ -255,6 +255,27 @@
             <button class="buy-button" type="button" id="modal-buy">Buy now</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="overlay hidden" id="location-modal" role="dialog" aria-modal="true">
+      <div class="location-sheet">
+        <button class="modal-close" type="button" data-location-close aria-label="Close">×</button>
+        <small class="sheet-kicker">DELIVERY LOCATION</small>
+        <h3>Where should we deliver?</h3>
+        <p class="sheet-sub">Prices and delivery speed are based on your pincode.</p>
+        <div class="loc-chip-row" id="loc-chip-row">
+          <button type="button" class="loc-chip selected" data-loc-preset="New Delhi|110001">New Delhi</button>
+          <button type="button" class="loc-chip" data-loc-preset="Mumbai|400001">Mumbai</button>
+          <button type="button" class="loc-chip" data-loc-preset="Bengaluru|560001">Bengaluru</button>
+          <button type="button" class="loc-chip" data-loc-preset="Pune|411001">Pune</button>
+          <button type="button" class="loc-chip" data-loc-preset="Kolkata|700001">Kolkata</button>
+          <button type="button" class="loc-chip" data-loc-preset="Hyderabad|500001">Hyderabad</button>
+        </div>
+        <label class="field"><span>Pincode</span><input id="loc-pin" type="tel" maxlength="6" inputmode="numeric" placeholder="6-digit pincode" autocomplete="off"></label>
+        <label class="field"><span>City</span><input id="loc-city" type="text" placeholder="City name" autocomplete="off"></label>
+        <p class="loc-estimate" id="loc-estimate">Estimated delivery: 3–5 working days · FREE over ₹999</p>
+        <button class="checkout" type="button" data-location-save>Apply location →</button>
       </div>
     </div>
   </div>

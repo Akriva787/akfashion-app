@@ -38,6 +38,49 @@ const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<':
 
 let currentUser = store.get(DB_USER, null);
 
+/* ---------- Delivery location ---------- */
+let deliverTo = store.get('akriva_deliver_to', { city: 'New Delhi', pin: '110001' });
+const LOC_PRESETS = {
+  'New Delhi|110001': 'New Delhi 110001',
+  'Mumbai|400001': 'Mumbai 400001',
+  'Bengaluru|560001': 'Bengaluru 560001',
+  'Pune|411001': 'Pune 411001',
+  'Kolkata|700001': 'Kolkata 700001',
+  'Hyderabad|500001': 'Hyderabad 500001',
+};
+
+function renderLocationLabel() {
+  const label = document.getElementById('location-label');
+  if (label) label.textContent = `${deliverTo.city} ${deliverTo.pin}`;
+  const chips = document.querySelectorAll('.loc-chip');
+  chips.forEach(chip => chip.classList.toggle('selected', LOC_PRESETS[chip.dataset.locPreset] === `${deliverTo.city} ${deliverTo.pin}`));
+}
+
+function openLocationModal() {
+  const modal = document.getElementById('location-modal');
+  document.getElementById('loc-pin').value = deliverTo.pin;
+  document.getElementById('loc-city').value = deliverTo.city;
+  renderLocationLabel();
+  modal.classList.remove('hidden');
+}
+
+function closeLocationModal() {
+  document.getElementById('location-modal').classList.add('hidden');
+}
+
+function applyLocation() {
+  const pin = document.getElementById('loc-pin').value.trim();
+  const city = document.getElementById('loc-city').value.trim();
+  if (!/^\d{6}$/.test(pin)) { toast('Enter a valid 6-digit pincode'); return; }
+  if (!city) { toast('Enter your city name'); return; }
+  deliverTo = { city, pin };
+  store.set('akriva_deliver_to', deliverTo);
+  renderLocationLabel();
+  closeLocationModal();
+  const hasCustom = !LOC_PRESETS[`${city}|${pin}`];
+  toast(hasCustom ? `Delivering to ${city} ${pin}` : `Delivering to ${city} ${pin}`);
+}
+
 /* ---------- Akriva support widget ---------- */
 function openSupportDrawer() {
   document.getElementById('supportDrawer').classList.add('open');
@@ -703,8 +746,22 @@ document.addEventListener('click', event => {
   if (event.target.closest('#chat-send')) { sendChatMessage(); return; }
 
   if (event.target.closest('.location')) {
-    toast('Delivery location can be changed at checkout');
+    openLocationModal();
     return;
+  }
+
+  if (event.target.closest('#location-modal')) {
+    if (event.target.closest('[data-location-save]')) { applyLocation(); return; }
+    if (event.target.closest('[data-location-close]')) { closeLocationModal(); return; }
+    const preset = event.target.closest('[data-loc-preset]');
+    if (preset) {
+      const [city, pin] = preset.dataset.locPreset.split('|');
+      document.getElementById('loc-city').value = city;
+      document.getElementById('loc-pin').value = pin;
+      renderLocationLabel();
+      return;
+    }
+    if (event.target.id === 'location-modal') { closeLocationModal(); return; }
   }
 
   const heart = event.target.closest('.heart');
@@ -1087,3 +1144,4 @@ document.addEventListener('keydown', event => {
 
 renderHome();
 updateCart();
+renderLocationLabel();

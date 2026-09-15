@@ -2350,3 +2350,48 @@ button { cursor: pointer; touch-action: manipulation; }
   letter-spacing: 3px;
   color: #5a4208;
 }
+/* ---------- Delivery location sheet ---------- */
+#location-modal .location-sheet {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(360px, calc(100% - 32px));
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px 18px 18px;
+  box-shadow: 0 18px 50px rgba(30, 7, 26, 0.35);
+  animation: popIn 0.18s ease;
+  max-height: calc(100% - 48px);
+  overflow: auto;
+}
+
+.location-sheet .sheet-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--rose);
+}
+
+.location-sheet h3 { margin: 6px 0 3px; font-size: 20px; }
+.location-sheet .sheet-sub { margin: 0 0 14px; font-size: 12px; color: var(--muted); }
+
+.location-sheet .loc-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.location-sheet .loc-chip {
+  border: 1.5px solid var(--line, #e9e2e6);
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #3d3a3c;
+}
+.location-sheet .loc-chip.selected {
+  border-color: var(--plum);
+  background: var(--plum);
+  color: #fff;
+}
+
+.location-sheet .field { margin-bottom: 12px; }
+.location-sheet .loc-estimate { font-size: 12px; color: #25763b; margin: 2px 0 12px; }
+.location-sheet .checkout { width: 100%; }
