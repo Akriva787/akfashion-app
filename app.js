@@ -275,6 +275,27 @@ function openSearch() {
   setTimeout(() => document.getElementById('search-input').focus(), 0);
 }
 
+function renderHomeSearch(query = '') {
+  const normalized = query.trim().toLowerCase();
+  const matches = normalized
+    ? products.filter(p => `${p.name} ${p.category}`.toLowerCase().includes(normalized))
+    : products;
+  document.getElementById('home-popular-searches').classList.toggle('hidden', Boolean(normalized));
+  document.getElementById('home-result-count').textContent = normalized ? `${matches.length} ${matches.length === 1 ? 'result' : 'results'} for “${query.trim()}”` : 'Curated for you';
+  document.getElementById('home-search-results').innerHTML = matches.length
+    ? matches.map(productCard).join('')
+    : emptyState('No exact match yet', 'Try searching for fashion, beauty, dresses or shirts.');
+  syncSavedButtons();
+}
+
+function setHomeSearchMode(on) {
+  const input = document.getElementById('home-search');
+  document.getElementById('home-screen').classList.toggle('searching', on);
+  document.getElementById('home-search-panel').classList.toggle('hidden', !on);
+  document.getElementById('home-search-clear').classList.toggle('hidden', !on || !input.value);
+  if (on) window.scrollTo(0, 0);
+}
+
 const wishlistCard = p => `<article class="wishlist-card" data-product="${p.id}" role="button" tabindex="0" aria-label="View ${p.name}">
   <div class="wishlist-thumb" style="background-image:url('${p.image}')"><span class="badge">${p.badge || 'LOVED'}</span><button class="heart is-saved" type="button" aria-label="Remove ${p.name} from saved loves">♥</button></div>
   <div class="wishlist-info"><small>${p.category.toUpperCase()}</small><h3>${p.name}</h3><p>${money(p.price)}${p.old ? ` <del>${money(p.old)}</del>` : ''}</p><span class="wish-save">priced for keeps</span><button class="wish-add" type="button" data-wish-add="${p.id}">Add to bag <b>+</b></button></div>
@@ -987,6 +1008,44 @@ document.getElementById('issueCategory').addEventListener('change', validateSupp
 document.getElementById('issueDetails').addEventListener('input', validateSupportForm);
 
 document.getElementById('search-input').addEventListener('input', event => renderSearchResults(event.target.value));
+
+const homeSearchInput = document.getElementById('home-search');
+homeSearchInput.addEventListener('focus', () => {
+  setHomeSearchMode(true);
+  renderHomeSearch(homeSearchInput.value);
+});
+homeSearchInput.addEventListener('input', () => {
+  setHomeSearchMode(true);
+  renderHomeSearch(homeSearchInput.value);
+});
+homeSearchInput.addEventListener('blur', () => {
+  setTimeout(() => {
+    if (!homeSearchInput.value && !document.activeElement.classList.contains('amz-search-clear')) {
+      setHomeSearchMode(false);
+      renderHomeSearch('');
+    }
+  }, 150);
+});
+homeSearchInput.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    homeSearchInput.value = '';
+    renderHomeSearch('');
+    setHomeSearchMode(false);
+    homeSearchInput.blur();
+  }
+});
+document.getElementById('home-search-clear').addEventListener('click', () => {
+  homeSearchInput.value = '';
+  renderHomeSearch('');
+  homeSearchInput.focus();
+});
+document.addEventListener('click', event => {
+  const term = event.target.closest('[data-home-search-term]')?.dataset.homeSearchTerm;
+  if (!term) return;
+  homeSearchInput.value = term;
+  renderHomeSearch(term);
+  homeSearchInput.focus();
+});
 document.getElementById('modal-add').addEventListener('click', () => {
   addItem(selectedProduct);
   document.getElementById('product-modal').classList.add('hidden');

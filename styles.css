@@ -1815,6 +1815,35 @@ button { cursor: pointer; touch-action: manipulation; }
   background: transparent;
 }
 
+.amz-search-clear {
+  border: 0;
+  background: #f0ecec;
+  color: #6b5a63;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.home-search-panel {
+  background: #fff;
+  min-height: 55vh;
+  padding: 2px 16px 70px;
+}
+
+#home-screen.searching .amz-sublinks,
+#home-screen.searching .amz-section,
+#home-screen.searching .amz-banner {
+  display: none;
+}
+
 .amz-sublinks {
   display: flex;
   gap: 16px;

@@ -20,10 +20,24 @@
           <button class="amz-loc location" type="button"><span class="amz-pin">⌖</span><span><small>Deliver to</small><b>New Delhi 110001</b></span></button>
           <button class="amz-bag icon-button" type="button" data-action="cart" aria-label="Open bag">♧<span class="cart-count">0</span></button>
         </div>
-        <div class="amz-search" data-action="search" role="button" tabindex="0" aria-label="Search">
+        <div class="amz-search">
           <span class="amz-search-icon">⌕</span>
-          <input type="search" id="home-search" placeholder="Search: sarees, glam kits, dresses, shirts…" readonly>
+          <input type="text" id="home-search" placeholder="Search: sarees, glam kits, dresses, shirts…" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button type="button" id="home-search-clear" class="amz-search-clear hidden" aria-label="Clear search">×</button>
         </div>
+      </div>
+      <div class="home-search-panel hidden" id="home-search-panel">
+        <div class="popular-searches" id="home-popular-searches">
+          <p>POPULAR SEARCHES</p>
+          <div>
+            <button type="button" data-home-search-term="saree">Sarees</button>
+            <button type="button" data-home-search-term="beauty">Beauty</button>
+            <button type="button" data-home-search-term="dress">Dresses</button>
+            <button type="button" data-home-search-term="shirt">Shirts</button>
+          </div>
+        </div>
+        <p class="result-count" id="home-result-count">Curated for you</p>
+        <div class="products" id="home-search-results"></div>
       </div>
       <div class="amz-sublinks">
         <button type="button" data-action="all">⚡ Deals</button>
